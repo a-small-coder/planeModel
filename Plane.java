@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.Random;
 import javax.swing.*;
 
-public class Plane {
+public class  Plane {
     final int LAYER1_CONST = 0;
     final int LAYER2_CONST = -8936;
     final int LAYER3_CONST = -17872;
@@ -45,13 +45,40 @@ public class Plane {
     boolean toAirport;
     int timeFueling;
 
-    
 
-    public Plane(){
-        tpimg = new ImageIcon("planesModel\\img\\transportPlane.png").getImage();
-        eventImage = new ImageIcon("planesModel\\img\\desant.png").getImage();
-        fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
-        fuel = random.nextInt(5000) + 8000;
+    public Plane(int type){
+        if (type == 0){
+            tpimg = new ImageIcon("planesModel\\img\\transportPlane.png").getImage();
+            eventImage = new ImageIcon("planesModel\\img\\desant.png").getImage();
+            fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
+            distanceToEvent = random.nextInt(3000) + 1000;
+            timeFueling = 30;
+            fuel = random.nextInt(5000) + 4000;
+        }
+        else if(type == 1){
+            tpimg = new ImageIcon("planesModel\\img\\bomber.png").getImage();
+            eventImage = new ImageIcon("planesModel\\img\\bombs.png").getImage();
+            fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
+            distanceToEvent = random.nextInt(4000) + 2000;
+            timeFueling = 50;
+            fuel = random.nextInt(5000) + 6000;
+        }
+        else if(type == 2){
+            tpimg = new ImageIcon("planesModel\\img\\fierFighter.png").getImage();
+            eventImage = new ImageIcon("planesModel\\img\\whater.png").getImage();
+            fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
+            distanceToEvent = random.nextInt(2000) + 1000;
+            timeFueling = 25;
+            fuel = random.nextInt(2000) + 2000;
+        }
+        else{
+            tpimg = new ImageIcon("planesModel\\img\\transportPlane.png").getImage();
+            eventImage = new ImageIcon("planesModel\\img\\desant.png").getImage();
+            fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
+            distanceToEvent = random.nextInt(3000) + 1000;
+            timeFueling = 30;
+            fuel = random.nextInt(5000) + 8000;
+        }
         s = 0;
         x = 1400;
         y = 900;
@@ -63,8 +90,6 @@ public class Plane {
         eventY = 100;
         fuelY = STANDART_Y;
         fuelX = STANDART_X + 400;
-        distanceToEvent = random.nextInt(1000) + 2000;
-        timeFueling = 50;
         travelDistance = distanceToEvent * 2;
         planeIsDown = false;
         isPlaneRise = true;
@@ -74,6 +99,7 @@ public class Plane {
         messageFuelNotShowed = true;
         message2FuelNotShowed = true;
         addingFuel = false;
+
     }
 
     public void downToAirport(){
@@ -140,12 +166,12 @@ public class Plane {
     }
 
     public void move(){
-        if (travelDistance >= fuel + 1500 && messageFuelNotShowed){
+        if ((travelDistance - s) >= fuel + 1000 && messageFuelNotShowed){
             JOptionPane.showMessageDialog(null, "Потребуется дозаправка в воздухе");
             messageFuelNotShowed = false;
         }
 
-        if (fuel < 2000  && travelDistance > 1000 && !planeIsDown && message2FuelNotShowed){
+        if (fuel < 1500  && (travelDistance - s) > 1000 && !planeIsDown && message2FuelNotShowed){
             JOptionPane.showMessageDialog(null, "Мало топлива! Вызовите дозаправщик");
             message2FuelNotShowed = false;
         }
@@ -155,7 +181,7 @@ public class Plane {
         }
 
         if (fuel <= 0 && !planeIsDown){
-            JOptionPane.showMessageDialog(null, "fuel is end");
+            JOptionPane.showMessageDialog(null, "Топливо закончилось. Самолет упал");
             planeIsDown = true;
         }
         if(planeIsDown){

@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Random;
 
 public class Sky extends JPanel implements ActionListener{
 
@@ -18,6 +19,7 @@ public class Sky extends JPanel implements ActionListener{
     JButton addFuelbutton;
     JButton restart;
 
+    final Random random = new Random();
     public final String dirName = "planesModel\\img\\";
     Image skySunRizeImg = new ImageIcon(dirName + "skySunRise.jpg").getImage();
     Image skyMorningImg = new ImageIcon(dirName + "skyMorning.jpg").getImage();
@@ -30,36 +32,42 @@ public class Sky extends JPanel implements ActionListener{
     Timer mainTimer = new Timer(20, this);
 
     private int startY = 0;
-    private int startX = 0;
 
-    Plane tPlane;
+    Plane plane;
 
-    public void createPlane(){
-        this.tPlane = new Plane();
+    public void createPlane(int type){
+        switch (type){
+            case 0: this.plane = new Plane(0); break;
+            case 1: this.plane = new Plane(1); break;
+            case 2: this.plane = new Plane(2); break;
+            default: break;
+        }
+        
     }
 
     public Sky(JFrame frame){
         this.frame = frame;
         createGUI(frame);
-        createPlane();
+        int t = random.nextInt(3); 
+        planeTypes.setSelectedIndex(t);
 		mainTimer.start();
     }
     @Override
     public void paint(Graphics g){
         g = (Graphics2D) g;
-        g.drawImage(skyes[0], tPlane.skySunRiseCordinateStart, startY, null);
-        g.drawImage(skyes[1], tPlane.skyDayCordinateStart, startY, null);
-        g.drawImage(skyes[2], tPlane.skyMorinigCordinateStart, startY, null);
-        g.drawImage(skyes[3], tPlane.skySunSetCordinateStart, startY, null);
-        g.drawImage(skyes[4], tPlane.skyNightCordinateStart, startY, null);
-        if (tPlane.y < 1000){
-            g.drawImage(tPlane.tpimg, tPlane.x, tPlane.y, null);
+        g.drawImage(skyes[0], plane.skySunRiseCordinateStart, startY, null);
+        g.drawImage(skyes[1], plane.skyDayCordinateStart, startY, null);
+        g.drawImage(skyes[2], plane.skyMorinigCordinateStart, startY, null);
+        g.drawImage(skyes[3], plane.skySunSetCordinateStart, startY, null);
+        g.drawImage(skyes[4], plane.skyNightCordinateStart, startY, null);
+        if (plane.y < 1000){
+            g.drawImage(plane.tpimg, plane.x, plane.y, null);
         }
-        if (tPlane.isEvent && tPlane.x <= tPlane.eventPositionX){
-            g.drawImage(tPlane.eventImage, tPlane.eventX, tPlane.eventY, null);
+        if (plane.isEvent && plane.x <= plane.eventPositionX){
+            g.drawImage(plane.eventImage, plane.eventX, plane.eventY, null);
         }
-        if (tPlane.addingFuel){
-            g.drawImage(tPlane.fuelAdderImg, tPlane.fuelX, tPlane.fuelY, null);
+        if (plane.addingFuel){
+            g.drawImage(plane.fuelAdderImg, plane.fuelX, plane.fuelY, null);
         }
         
     }
@@ -92,31 +100,34 @@ public class Sky extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (tPlane.isPlaneRise){
-            tPlane.planeRize();
+        if (plane.isPlaneRise){
+            plane.planeRize();
         }
-        else if (tPlane.isEvent){
-            tPlane.planeEvent();
+        else if (plane.isEvent){
+            plane.planeEvent();
         }
-        else if (tPlane.addingFuel){
-            tPlane.addFuel();
-            tPlane.move();
+        else if (plane.addingFuel){
+            plane.addFuel();
+            plane.move();
         } 
         else{
-            tPlane.move();
+            plane.move();
         }
         
         // изменение подписей при посадке\падении
-        if (!tPlane.planeIsDown){
-            int b = tPlane.travelDistance - tPlane.s;
+        if (!plane.planeIsDown){
+            int b = plane.travelDistance - plane.s;
             if (b < 0){
                 b = 0;
-                tPlane.downToAirport();
+                if (plane.isEventDone){
+                    plane.downToAirport();
+                }
             }
+            distanceLostInfoLabel.setText("Пролететь осталось: ");
             distanceLostValueLabel.setText(" " + Integer.toString(b) + "км ");
         }
         else{
-            if (tPlane.travelDistance - tPlane.s <= 0){
+            if (plane.travelDistance - plane.s <= 0){
                 distanceLostInfoLabel.setText("Самолет сел");
             }
             else{
@@ -126,9 +137,9 @@ public class Sky extends JPanel implements ActionListener{
         }
 
         // отключение кнопок
-        if (tPlane.isEvent || tPlane.isEventDone || tPlane.isPlaneRise || tPlane.planeIsDown){
+        if (plane.isEvent || plane.isEventDone || plane.isPlaneRise || plane.planeIsDown){
             startEventButton.setEnabled(false);
-            if (tPlane.isEventDone && !tPlane.planeIsDown){
+            if (plane.isEventDone && !plane.planeIsDown){
                 addFuelbutton.setEnabled(true);
             }
             else{
@@ -141,8 +152,8 @@ public class Sky extends JPanel implements ActionListener{
         }
 
         // изменение подписей при событии
-        if (!tPlane.isEventDone){
-            int a = tPlane.distanceToEvent - tPlane.s;
+        if (!plane.isEventDone){
+            int a = plane.distanceToEvent - plane.s;
             if (a < 0){
                 a = 0;
             }
@@ -153,7 +164,7 @@ public class Sky extends JPanel implements ActionListener{
             spaceToEventStartInfoLabel.setText("событие произошло");
             spaceToEventStartValueLabel.setText("");
         }
-        fuelValueLabel.setText(" " + Integer.toString(tPlane.fuel) + "км ");
+        fuelValueLabel.setText(" " + Integer.toString(plane.fuel) + "км ");
 
         repaint();
         //getInfomationOfPlane(tPlane);
@@ -167,9 +178,11 @@ public class Sky extends JPanel implements ActionListener{
         GroupPanel.add(planesLabel);
         planeTypes = new JComboBox();
         planeTypes.setPreferredSize(new Dimension(150, 30)); 
-        planeTypes.addItem("1");
-        planeTypes.addItem("2");
-        planeTypes.addItem("3");
+        planeTypes.addItem("десантный");
+        planeTypes.addItem("бомбардировщик");
+        planeTypes.addItem("пожарный");
+        ButtonHandler planeChooser = new ButtonHandler();
+        planeTypes.addActionListener(planeChooser);
         GroupPanel.add(planeTypes);
 
         spaceToEventStartInfoLabel = new JLabel("до точки события осталось: ");
@@ -213,22 +226,28 @@ public class Sky extends JPanel implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
             if (command.equals("вызвать заправщик")) {
-                if (tPlane.timeFueling == 0){
+                if (plane.timeFueling == 0){
                     JOptionPane.showMessageDialog(null, "Можно вызвать не более одного дозаправщика");
                 }
-                else if (tPlane.travelDistance - tPlane.s < 1000){
+                else if (plane.travelDistance - plane.s < 1000){
                     JOptionPane.showMessageDialog(null, "Начинается посадка. Дозаправка невозможна");
                 }
                 else{
-                    tPlane.addingFuel = true;
+                    plane.addingFuel = true;
                 }
             }
             else if(command.equals("новый самолет")){
-                createPlane();
+                int t = random.nextInt(3); 
+                planeTypes.setSelectedIndex(t);
             }
             else if(command.equals("запустить событие")){
-                tPlane.isEvent = true;
-                tPlane.distanceToEvent = tPlane.s;
+                plane.isEvent = true;
+                plane.distanceToEvent = plane.s;
+            }
+            else if (e.getSource() instanceof JComboBox) {
+                JComboBox mySource = (JComboBox) e.getSource();
+                int index = mySource.getSelectedIndex();
+                createPlane(index);
             }
 		}	
 	} 

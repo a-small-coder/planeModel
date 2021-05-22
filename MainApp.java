@@ -13,7 +13,7 @@ public class MainApp {
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setResizable(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setBounds(100, 100, (int) dim.getWidth(), (int) dim.getHeight());
+        f.setBounds(100, 100, 1500, 1000);
         f.setLocationRelativeTo(null);
         return f;
     }

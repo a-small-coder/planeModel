@@ -3,11 +3,12 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class Sky extends JPanel implements ActionListener{
-    Image skySunRizeImg = new ImageIcon("planeModel\\img\\skySunRise.jpg").getImage();
-    Image skyMorningImg = new ImageIcon("planeModel\\img\\skyMorning.jpg").getImage();
-    Image skyDayImg = new ImageIcon("planeModel\\img\\skyBig.jpg").getImage();
-    Image skySunSetImg = new ImageIcon("planeModel\\img\\skySunset.jpg").getImage();
-    Image skyNightImg = new ImageIcon("planeModel\\img\\skyNight.jpg").getImage();
+    public final String dirName = "planesModel\\img\\";
+    Image skySunRizeImg = new ImageIcon(dirName + "skySunRise.jpg").getImage();
+    Image skyMorningImg = new ImageIcon(dirName + "skyMorning.jpg").getImage();
+    Image skyDayImg = new ImageIcon(dirName + "skyBig.jpg").getImage();
+    Image skySunSetImg = new ImageIcon(dirName + "skySunset.jpg").getImage();
+    Image skyNightImg = new ImageIcon(dirName + "skyNight.jpg").getImage();
 
     Image skyImg = skySunRizeImg;
     Image[] skyes = {skySunRizeImg, skyMorningImg, skyDayImg, skySunSetImg, skyNightImg};
@@ -17,6 +18,8 @@ public class Sky extends JPanel implements ActionListener{
     private int startX = 0;
 
     Plane tPlane = new Plane();
+
+    
 
     public Sky(){
         mainTimer.start();
@@ -41,4 +44,6 @@ public class Sky extends JPanel implements ActionListener{
         repaint();
     }
 
+
+     
 }

@@ -4,7 +4,7 @@ import java.util.Random;
 import javax.swing.*;
 
 public class Plane {
-    Image tpimg = new ImageIcon("planeModel\\img\\transportPlane.png").getImage();
+    Image tpimg = new ImageIcon("planesModel\\img\\transportPlane.png").getImage();
 
     final int LAYER1_CONST = 0;
     final int LAYER2_CONST = -8936;
@@ -24,6 +24,10 @@ public class Plane {
     int fuel = random.nextInt(10000) + 10000;
     int s = 0;
     boolean planeIsDown = false;
+
+    public void addFuel(){
+        this.fuel += 10000;
+    }
 
     public void move(){
         

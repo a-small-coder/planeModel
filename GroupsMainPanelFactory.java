@@ -5,12 +5,13 @@ public class GroupsMainPanelFactory{
     JPanel GroupPanel;
     public JPanel create(String typeOfPanel){
         if (typeOfPanel.equals("выбор самолета")) {
-            GroupPanel = new JPanel(new GridLayout(0, 1, 15, 15));
-            GroupPanel.setBorder(BorderFactory.createTitledBorder("выбор самолета"));
-            GroupPanel.setPreferredSize(new Dimension(400, 100));
+            GroupPanel = new JPanel(new GridLayout(0, 2, 15, 0));
+
+            JLabel falloutChanceL = new JLabel("выбор самолета: ");
+            GroupPanel.add(falloutChanceL);
 
             JComboBox planeTypes = new JComboBox();
-            planeTypes.setPreferredSize(new Dimension(200, 30));
+            planeTypes.setBounds(40,40, 150,20);
             planeTypes.addItem("1");
             planeTypes.addItem("2");
             planeTypes.addItem("3");
@@ -19,14 +20,14 @@ public class GroupsMainPanelFactory{
         }
 
         if (typeOfPanel.equals("погода")){
-            GroupPanel = new JPanel(new GridLayout(0, 2, 15, 15));
+            GroupPanel = new JPanel(new GridLayout(0, 2, 15, 0));
             GroupPanel.setBorder(BorderFactory.createTitledBorder("погода"));
     
             JLabel falloutChanceL = new JLabel("вероятность осадков");
             GroupPanel.add(falloutChanceL);
     
             JComboBox falloutChanceCB = new JComboBox();
-            falloutChanceCB.setSize(50, 30);
+            falloutChanceCB.setBounds(40,40,90,20);
             falloutChanceCB.addItem("0%");
             falloutChanceCB.addItem("20%");
             falloutChanceCB.addItem("40%");
@@ -50,36 +51,38 @@ public class GroupsMainPanelFactory{
         }
 
         if (typeOfPanel.equals("событие")){
-            GroupPanel = new JPanel(new GridLayout(0, 1, 15, 15));
-            GroupPanel.setBorder(BorderFactory.createTitledBorder("событие"));
+            GroupPanel = new JPanel(new GridLayout(0, 2, 15, 0));
+
 
             JLabel spaceToEventStartInfoLabel = new JLabel("до точки события осталось: ");
             // spaceToEventStartInfoLabel.setLocation(800, 125);
             GroupPanel.add(spaceToEventStartInfoLabel);
 
             
-            JLabel spaceToEventStartLabel = new JLabel("");
-            GroupPanel.add(spaceToEventStartLabel);
+            // JLabel spaceToEventStartLabel = new JLabel("");
+            // GroupPanel.add(spaceToEventStartLabel);
 
-            JButton addFuelbutton = new JButton("запустить событие");
-            // addFuelbutton.setLocation(1050, 175);
-            addFuelbutton.setSize(215, 30); 
+            JButton startEventButton = new JButton("запустить событие");
+            // startEventButton.setLocation(1050, 40);
+            startEventButton.setPreferredSize(new Dimension(215, 30)); 
+            GroupPanel.add(startEventButton);
 
         }
 
         if (typeOfPanel.equals("Топливо")){
-            GroupPanel = new JPanel(new GridLayout(0, 2, 15, 15));
-            GroupPanel.setBorder(BorderFactory.createTitledBorder("Топливо"));
+            GroupPanel = new JPanel(new GridLayout(0, 2, 15, 0));
+            // GroupPanel.setBorder(BorderFactory.createTitledBorder("Топливо"));
 
             JLabel fuelInfoLabel = new JLabel("Топливо осталось: ");
             GroupPanel.add(fuelInfoLabel);
 
-            JLabel fuelLabel = new JLabel("");
-            GroupPanel.add(fuelLabel);
+            // JLabel fuelLabel = new JLabel("");
+            // GroupPanel.add(fuelLabel);
 
             JButton addFuelbutton = new JButton("вызвать заправщик");
             // addFuelbutton.setLocation(1050, 175);
-            addFuelbutton.setSize(215, 30);            
+            addFuelbutton.setSize(215, 30);    
+            GroupPanel.add(addFuelbutton);        
         }
         return GroupPanel;     
     }

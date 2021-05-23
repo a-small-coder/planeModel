@@ -2,59 +2,29 @@ import java.awt.*;
 import java.util.Random;
 import javax.swing.*;
 
-public class BomberPlane extends Plane{
+public class FierFighter extends Plane{
     private final Random random = new Random();
     private boolean eventAndFuel;
-    public BomberPlane(int timeFactor){
+    public FierFighter(int timeFactor){
         super(timeFactor);
-        Image tpimg = new ImageIcon("planesModel\\img\\bomber.png").getImage();
-        Image eventImage = new ImageIcon("planesModel\\img\\bombs.png").getImage();
+        Image tpimg = new ImageIcon("planesModel\\img\\fierFighter.png").getImage();
+        Image eventImage = new ImageIcon("planesModel\\img\\whater.png").getImage();
         Image fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
         Image[] images = {tpimg, eventImage, fuelAdderImg};
         set_Images(images);
-        int distanceEvent = random.nextInt(3000) + 2000;
+        int distanceEvent = random.nextInt(1000) + 1000;
         set_distanceToEvent(distanceEvent);
-        set_timeFueling(60);
-        add_fuel(random.nextInt(4000) + 4000);
-        set_fuelX(STANDART_X + 400);
-        set_fuelY(STANDART_Y);
-        set_travelDistance(distanceEvent * 2 + 1500);
+        add_fuel(random.nextInt(2000) + 5000);
+        set_travelDistance(distanceEvent * 2);
         eventAndFuel = false;
 }
     
     @Override
     public void addFuel(){
-        // смещение самолета на 200 пикселей вниз
-        if (get_Y() < STANDART_Y + 200 && get_timeFueling() > 0){
-            set_y(get_Y() + get_vY());
-        }
-        // вылет дозаправщика
-        if (get_fuelX() > STANDART_X - 550){
-            set_fuelX(get_fuelX() - get_vX());
-        }
-        else{
-            // заправка
-            if(get_timeFueling() > 0){
-                add_fuel(150);
-                add_timeFueling(-1);
-            }
-            else{
-                // дозапрвщик улетает
-                if (get_fuelY() > STANDART_Y - 400){
-                    set_fuelY(get_fuelY() - get_vY());
-                }
-                // возварт самолета на исходную позицию
-                else if (get_Y() > STANDART_Y){
-                    set_y(get_Y() - get_vY());
-                }
-                // установка флага окончания дозапрвки
-                else{
-                    set_addingFuelFlag(false);
-                }
-            }
-        }
+        // установка флага окончания дозаправки (этот тип самолета нельзя заправить)
+        set_addingFuelFlag(true);
     }
-    
+
     @Override
     public void planeEvent(){
         
@@ -116,5 +86,4 @@ public class BomberPlane extends Plane{
     public int get_mapNumber(){
         return 0;
     }
-
 }

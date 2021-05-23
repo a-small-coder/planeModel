@@ -1,138 +1,95 @@
 import java.awt.*;
 import java.util.Random;
-import javax.swing.*;
 
-public class  Plane {
+import javax.swing.JOptionPane;
+
+public abstract class  Plane {
     final int LAYER1_CONST = 0;
     final int LAYER2_CONST = -8936;
     final int LAYER3_CONST = -17872;
     final int LAYER4_CONST = -20000;
     final int LAYER5_CONST = -28800;
     final Random random = new Random();
-    final int STANDART_Y = 100;
-    final int STANDART_X = 1000;
+    int STANDART_Y = 100;
+    int STANDART_X = 1000;
     final int maximumTravelDistance = 13000;
-    Image tpimg;
-    Image eventImage;
-    Image fuelAdderImg;
-    int eventX;
-    int eventY;
-    int fuelX;
-    int fuelY;
-    int eventVX;
-    int eventVY;
-    int eventPositionX = 600;
-    int skySunRiseCordinateStart = LAYER1_CONST;
-    int skyMorinigCordinateStart = LAYER2_CONST;
-    int skyDayCordinateStart = LAYER3_CONST;
-    int skySunSetCordinateStart = LAYER4_CONST;
-    int skyNightCordinateStart = LAYER5_CONST;
-    int vX;
-    int vY;
-    int x;
-    int y;
-    int fuel;
-    int s;
-    int travelDistance;
-    int distanceToEvent;
-    boolean planeIsDown;
-    boolean isPlaneRise;
-    boolean isEvent;
-    boolean isEventDone;
-    boolean messageFuelNotShowed;
-    boolean message2FuelNotShowed;
-    boolean addingFuel;
-    boolean toAirport;
-    int timeFueling;
+    final int vxNORMAL = 5;
+    final int vyNORMAL = 10;
+    final int eventvxNORMAL = 10;
+    final int eventvyNORMAL = 5;
+    private int timeFactor;
+    
+    private int eventPositionX = 600;
+    private int eventPositionY;
+    int skySunRiseCordinateStart;
+    int skyMorinigCordinateStart;
+    int skyDayCordinateStart;
+    int skySunSetCordinateStart;
+    int skyNightCordinateStart;
+    private Image tpimg;
+    private Image eventImage;
+    private Image fuelAdderImg;
+    private int eventX;
+    private int eventY;
+    private int fuelX;
+    private int fuelY;
+    private int eventVX;
+    private int eventVY;
+    private int vX;
+    private int vY;
+    private int x;
+    private int y;
+    private int fuel;
+    private int s;
+    private int travelDistance;
+    private int distanceToEvent;
+    private int timeFueling;
+    private boolean planeDown;
+    private boolean planeRise;
+    private boolean event;
+    private boolean eventDone;
+    private boolean messageFuelNotShowed;
+    private boolean message2FuelNotShowed;
+    private boolean addingFuel;
+    private boolean toAirport;
+   
 
-
-    public Plane(int type){
-        if (type == 0){
-            tpimg = new ImageIcon("planesModel\\img\\transportPlane.png").getImage();
-            eventImage = new ImageIcon("planesModel\\img\\desant.png").getImage();
-            fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
-            distanceToEvent = random.nextInt(3000) + 1000;
-            timeFueling = 30;
-            fuel = random.nextInt(5000) + 4000;
-        }
-        else if(type == 1){
-            tpimg = new ImageIcon("planesModel\\img\\bomber.png").getImage();
-            eventImage = new ImageIcon("planesModel\\img\\bombs.png").getImage();
-            fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
-            distanceToEvent = random.nextInt(4000) + 2000;
-            timeFueling = 50;
-            fuel = random.nextInt(5000) + 6000;
-        }
-        else if(type == 2){
-            tpimg = new ImageIcon("planesModel\\img\\fierFighter.png").getImage();
-            eventImage = new ImageIcon("planesModel\\img\\whater.png").getImage();
-            fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
-            distanceToEvent = random.nextInt(2000) + 1000;
-            timeFueling = 25;
-            fuel = random.nextInt(2000) + 2000;
-        }
-        else{
-            tpimg = new ImageIcon("planesModel\\img\\transportPlane.png").getImage();
-            eventImage = new ImageIcon("planesModel\\img\\desant.png").getImage();
-            fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
-            distanceToEvent = random.nextInt(3000) + 1000;
-            timeFueling = 30;
-            fuel = random.nextInt(5000) + 8000;
-        }
-        s = 0;
-        x = 1400;
-        y = 900;
-        vX = 10;
-        vY = 20;
-        eventVX = 20;
-        eventVY = 10;
-        eventX = 900;
-        eventY = 100;
-        fuelY = STANDART_Y;
-        fuelX = STANDART_X + 400;
-        travelDistance = distanceToEvent * 2;
-        planeIsDown = false;
-        isPlaneRise = true;
-        isEvent = false;
-        isEventDone = false;
+    public Plane(int timeF){
+        skySunRiseCordinateStart = LAYER1_CONST;
+        skyMorinigCordinateStart = LAYER2_CONST;
+        skyDayCordinateStart = LAYER3_CONST;
+        skySunSetCordinateStart = LAYER4_CONST;
+        skyNightCordinateStart = LAYER5_CONST;
+        planeDown = false;
+        planeRise = true;
+        event = false;
+        eventDone = false;
         toAirport = false;
         messageFuelNotShowed = true;
         message2FuelNotShowed = true;
         addingFuel = false;
-
+        fuel = 0;
+        this.timeFactor = timeF;
+        set_s(0);
+        set_x(1400);
+        set_y(900);
+        set_vX(vxNORMAL);
+        set_vY(vyNORMAL);
+        set_eventX(900);
+        set_eventY(100);
+        set_eventVX(eventvxNORMAL);
+        set_eventVY(eventvyNORMAL);
+        changeTimeSpeed();
     }
-
-    public void downToAirport(){
-        planeIsDown = true;
-        toAirport = true;
+    public void set_timeFactor(int num){
+        timeFactor = num;
     }
-
-    public void addFuel(){
-        if (y < STANDART_Y + 200 && timeFueling > 0){
-            y += vY;
-        }
-        if (fuelX > STANDART_X - 550){
-            fuelX -= vX;
-        }
-        else{
-            if(timeFueling > 0){
-                this.fuel += 150;
-                timeFueling -= 1;
-            }
-            else{
-                if (fuelY > STANDART_Y - 400){
-                    fuelY -= vY;
-                }
-                else if (y > STANDART_Y){
-                    y -= vY;
-                }
-                else{
-                    addingFuel = false;
-                }
-            }
-        }
+    public void changeTimeSpeed(){
+        set_vX(vxNORMAL * timeFactor);
+        set_vY(vyNORMAL * timeFactor);
+        set_eventVX(eventvxNORMAL * timeFactor);
+        set_eventVY(eventvyNORMAL * timeFactor);
     }
-
     public void planeRize(){
         if (y > STANDART_Y) {
             y -= vY;
@@ -141,50 +98,33 @@ public class  Plane {
             }
         }
         if (y == STANDART_Y){
-            isPlaneRise = false;
+            planeRise = false;
         }
         fuel -= vX;
         s += vX;
-        moveLayers();
+        moveLayers( get_vX());
     }
-
-    public void moveLayers(){
-        if (skyNightCordinateStart + vX >= 0){
-            skySunRiseCordinateStart = LAYER1_CONST;
-            skyMorinigCordinateStart = LAYER2_CONST;
-            skyDayCordinateStart = LAYER3_CONST;
-            skySunSetCordinateStart = LAYER4_CONST;
-            skyNightCordinateStart = LAYER5_CONST;
-        }
-        else {
-            skySunRiseCordinateStart += vX;
-            skyMorinigCordinateStart += vX;
-            skyDayCordinateStart += vX;
-            skySunSetCordinateStart += vX;
-            skyNightCordinateStart += vX;
-        }
-    }
-
+    
     public void move(){
         if ((travelDistance - s) >= fuel + 1000 && messageFuelNotShowed){
             JOptionPane.showMessageDialog(null, "Потребуется дозаправка в воздухе");
             messageFuelNotShowed = false;
         }
 
-        if (fuel < 1500  && (travelDistance - s) > 1000 && !planeIsDown && message2FuelNotShowed){
+        if (fuel < 1500  && (travelDistance - s) > 1000 && !planeDown && message2FuelNotShowed){
             JOptionPane.showMessageDialog(null, "Мало топлива! Вызовите дозаправщик");
             message2FuelNotShowed = false;
         }
 
-        if (s >= distanceToEvent && !isEventDone && !addingFuel){
-            isEvent = true;
+        if (s >= distanceToEvent && !eventDone && !addingFuel){
+            event = true;
         }
 
-        if (fuel <= 0 && !planeIsDown){
-            JOptionPane.showMessageDialog(null, "Топливо закончилось. Самолет упал");
-            planeIsDown = true;
+        if (fuel <= 0 && !planeDown){
+            JOptionPane.showMessageDialog(null, "Топливо закончилось. Самолет разбился");
+            planeDown = true;
         }
-        if(planeIsDown){
+        if(planeDown){
             if ( y < 1000){
                 y += vY;
                 s += vX;
@@ -200,34 +140,198 @@ public class  Plane {
                 fuel = 0;
             }
         }
-        moveLayers();
+        moveLayers(get_vX());
     }
 
-    public void planeEvent(){
-        if(x >= eventPositionX && eventY < 1000){
-            x -= vX;
+    // иммитация движения самолета (на самом деле двигаются фоновые изображения на vX пикселей каждый тик наймера)
+    public void moveLayers(int vx){
+        vx = vx * 2;
+        if (skyNightCordinateStart + vx >= 0){
+            skySunRiseCordinateStart = LAYER1_CONST;
+            skyMorinigCordinateStart = LAYER2_CONST;
+            skyDayCordinateStart = LAYER3_CONST;
+            skySunSetCordinateStart = LAYER4_CONST;
+            skyNightCordinateStart = LAYER5_CONST;
         }
-        else{
-            eventX += eventVX;
-            eventY += eventVY;
+        else {
+            skySunRiseCordinateStart += vx;
+            skyMorinigCordinateStart += vx;
+            skyDayCordinateStart += vx;
+            skySunSetCordinateStart += vx;
+            skyNightCordinateStart += vx;
         }
-        
-        if (eventY > 1000){
-            
-            if(x < STANDART_X){
-                x += vX;
-            }
-            else{
-                isEvent = false;
-                distanceToEvent = 0;
-                isEventDone = true;
-            }
-        }
-        fuel -= vX;
-        s += vX;
-        if (fuel < 0){
-            fuel = 0;
-        }
-        moveLayers();
     }
+
+    public void set_STANDART_X(int num){
+        STANDART_X = num;
+    }
+    public void set_STANDART_Y(int num){
+        STANDART_Y = num;
+    }
+    public int get_STANDART_X(){
+        return STANDART_X;
+    }
+    public int get_STANDART_Y(){
+        return STANDART_Y;
+    }
+    public void set_Images(Image[] images){
+        tpimg = images[0];
+        eventImage = images[1];
+        fuelAdderImg = images[2];
+    }
+    public void set_timeFueling(int num){
+        timeFueling = num;
+    }
+    public void set_s(int num){
+        s = num;
+    }
+    public void set_x(int num){
+        x = num;
+    }
+    public void set_y(int num){
+        y = num;
+    }
+    public void set_vX(int num){
+        vX = num;
+    }
+    public void set_vY(int num){
+        vY = num;
+    }
+    public void set_eventX(int num){
+        eventX = num;
+    }
+    public void set_eventY(int num){
+        eventY = num;
+    }
+    public void set_eventVX(int num){
+        eventVX = num;
+    }
+    public void set_eventVY(int num){
+        eventVY = num;
+    }
+    public void set_fuelX(int num){
+        fuelX = num;
+    }
+    public void set_fuelY(int num){
+        fuelY = num;
+    }
+    public void set_travelDistance(int num){
+        travelDistance = num;
+    }
+    public Image[] get_Images(){
+        Image[] imgs = {tpimg, eventImage, fuelAdderImg};
+        return imgs;
+    }
+    public int get_Fuel(){
+        return fuel;
+    }
+    public int get_fuelX(){
+        return fuelX;
+    }
+    public int get_fuelY(){
+        return fuelY;
+    }
+    public int get_vX(){
+        return vX;
+    }
+    public int get_vY(){
+        return vY;
+    }
+    public int get_X(){
+        return x;
+    }
+    public int get_Y(){
+        return y;
+    }
+    public int get_s(){
+        return s;
+    }
+    public int get_eventVX(){
+        return eventVX;
+    }
+    public int get_eventVY(){
+        return eventVY;
+    }
+    public int get_eventX(){
+        return eventX;
+    }
+    public int get_eventY(){
+        return eventY;
+    }
+    public int get_timeFueling(){
+        return timeFueling;
+    }
+    public int get_travelDistance(){
+        return travelDistance;
+    }
+    public int get_distanceToEvent(){
+        return distanceToEvent;
+    }
+    public int get_eventPositionX(){
+        return eventPositionX;
+    }
+    public void set_eventPositionX(int num){
+        eventPositionX = num;
+    }
+    public int get_eventPositionY(){
+        return eventPositionY;
+    }
+    public void set_eventPositionY(int num){
+        eventPositionY = num;
+    }
+    public boolean isEvent(){
+        return event;
+    }
+    public boolean isEventDone(){
+        return eventDone;
+    }
+    public boolean isMessageFuelNotShowed(){
+        return messageFuelNotShowed;
+    }
+    public boolean isMessage2FuelNotShowed(){
+        return message2FuelNotShowed;
+    }
+    public boolean isToAirport(){
+        return toAirport;
+    }
+    public boolean isPlaneDown(){
+        return planeDown;
+    }
+    public boolean isPlaneRise() {
+        return planeRise;
+    }
+    public boolean isAddingFuel() {
+        return addingFuel;
+    }
+    public void set_distanceToEvent(int d){
+        this.distanceToEvent = d;
+    }
+    public void set_EventFlag(boolean flag){
+        this.event = flag;
+    }
+    public void set_EventDoneFlag(boolean flag){
+        eventDone = flag;
+    }
+    public void set_addingFuelFlag(boolean flag){
+        this.addingFuel = flag;
+    }
+    public void add_fuel(int num){
+        this.fuel += num;
+    }
+    public void add_timeFueling(int num){
+        this.timeFueling += num;
+    }
+    public void set_planeDownFlag(boolean flag){
+        planeDown = flag;
+    }
+    public void set_toAirport(boolean flag){
+        toAirport = flag;
+    }
+
+    public abstract void downToAirport();
+    public abstract void addFuel();
+    public abstract void planeEvent();
+    public abstract boolean MayChangeMap();
+    public abstract int get_mapNumber();
+    
 }

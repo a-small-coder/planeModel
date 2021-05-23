@@ -2,70 +2,61 @@ import java.awt.*;
 import java.util.Random;
 import javax.swing.*;
 
-public class TransportPlane extends Plane{
+public class ScouterPlane extends Plane{
     private final Random random = new Random();
     // private boolean eventAndFuel; // фалг необходимый для учета координат изображения события при одновременной дозаправке
-    private int desantCounter;
-    private boolean desantCounterChange;
-    public TransportPlane(int timeFactor){
+    private int mapShowed;
+    private boolean mapShowing;
+    private int eventShowedTime = 250;
+    private boolean changeMap;
+    public ScouterPlane(int timeFactor){
         super(timeFactor);
-        Image tpimg = new ImageIcon("planesModel\\img\\transportPlane.png").getImage();
+        Image tpimg = new ImageIcon("planesModel\\img\\Scouter.png").getImage();
         Image eventImage = new ImageIcon("planesModel\\img\\desant.png").getImage();
         Image fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
         Image[] images = {tpimg, eventImage, fuelAdderImg};
         set_Images(images);
-        int distanceEvent = random.nextInt(3000) + 1000;
+        int distanceEvent = random.nextInt(1000) + 1000;
         set_distanceToEvent(distanceEvent);
         set_timeFueling(30);
-        add_fuel(random.nextInt(5000) + 4000);
-        set_fuelX(STANDART_X + 400);
-        set_fuelY(STANDART_Y);
-        set_travelDistance(distanceEvent * 2 + 1000);
+        add_fuel(random.nextInt(300) + 5000);
+        set_travelDistance(distanceEvent + 1000);
         // eventAndFuel = false;
-        desantCounter = 3;
-        set_eventPositionY(400);
-        desantCounterChange = false;
-
+        mapShowed = 3;
+        set_eventPositionX(600);
+        set_eventPositionY(500);
+        mapShowing = true;
+        set_eventX(1475);
+        set_eventY(600);
+        set_STANDART_Y(400);
+        
 }
-    // дозапрвка
+
     @Override
-    public void addFuel(){
-        // смещение самолета на 200 пикселей вниз
-        if (get_Y() < STANDART_Y + 200 && get_timeFueling() > 0){
-            set_y(get_Y() + get_vY());
-        }
-        // вылет дозаправщика
-        if (get_fuelX() > STANDART_X - 550){
-            set_fuelX(get_fuelX() - get_vX());
-        }
-        else{
-            // заправка
-            if(get_timeFueling() > 0){
-                add_fuel(150);
-                add_timeFueling(-1);
-            }
-            else{
-                // дозапрвщик улетает
-                if (get_fuelY() > STANDART_Y - 400){
-                    set_fuelY(get_fuelY() - get_vY());
-                }
-                // возварт самолета на исходную позицию
-                else if (get_Y() > STANDART_Y){
-                    set_y(get_Y() - get_vY());
-                }
-                // установка флага окончания дозапрвки
-                else{
-                    set_addingFuelFlag(false);
-                }
-            }
-        }
+    public void downToAirport() {
+        set_planeDownFlag(true);
+        set_toAirport(true);
+        
     }
 
-    // выполнение события
     @Override
-    public void planeEvent(){
+    public void addFuel() {
+        set_addingFuelFlag(true);
+        
+    }
+    @Override
+    public boolean MayChangeMap(){
+        return changeMap;
+    }
+    @Override
+    public int get_mapNumber(){
+        return random.nextInt(7) + 1;
+    }
+
+    @Override
+    public void planeEvent() {
         // путь к точке события
-        if((get_X() >= get_eventPositionX() || get_Y() <= get_eventPositionY()) && get_eventY() < 1000 && desantCounter > 0){
+        if((get_X() >= get_eventPositionX() || get_Y() <= get_eventPositionY()) && get_eventY() < 1000 && mapShowed > 0){
             if (get_X() >= get_eventPositionX()){
                 set_x(get_X() - get_vX());
             }
@@ -76,22 +67,22 @@ public class TransportPlane extends Plane{
         }
         else{
             // если событие началось, то меняем стартовое значение изображения собития
-            if (!desantCounterChange){
-                set_eventX(get_X() + 215);
-                set_eventY(get_Y());
-                desantCounterChange = true;
-                desantCounter -= 1;
+            if (!mapShowing){
+                mapShowing = true;
+                mapShowed -= 1;
             }
             // движение изображения события
-            set_eventX(get_eventX() + get_eventVX());
-            set_eventY(get_eventY() + get_eventVY());
+            eventShowedTime -= get_vX();
+            if (MayChangeMap()){
+                changeMap = false;
+            }
         }
         // если изображение дошло до точки повтора события или его завершения
-        if (get_eventY() > 800){
-            if (desantCounter > 0){
-                set_eventX(get_X() + 215);
-                set_eventY(get_Y());
-                desantCounter -= 1;
+        if (eventShowedTime <= 0){
+            if (mapShowed > 0){
+                eventShowedTime = 250;
+                mapShowed -= 1;
+                changeMap = true;
             }
             else{
                     // возврат самолета к исходной позиции
@@ -144,22 +135,7 @@ public class TransportPlane extends Plane{
         }
         // имитация движения самолета 
         moveLayers(get_vX());
+        
     }
-
-    // посадка самолета
-    @Override
-    public void downToAirport(){
-        set_planeDownFlag(true);
-        set_toAirport(true);
-    }
-
-    @Override
-    public boolean MayChangeMap(){
-        return false;
-    }
-    @Override
-    public int get_mapNumber(){
-        return 0;
-    }
-
+    
 }

@@ -18,6 +18,11 @@ public class MainApp {
       
 
     public static void main(String args[]){
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // If Nimbus is not available, you can set the GUI to another look and feel.
+        }
         JFrame f = new JFrame();
         f.setTitle("моделирование полета самолета");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -25,6 +30,7 @@ public class MainApp {
         f.setBounds(100, 100, 1600, 900);
         f.setLocationRelativeTo(null);
         f.add(new Sky(f), BorderLayout.CENTER);
+        f.setIconImage(new ImageIcon("planesModel\\img\\planeIcon.png").getImage());
         f.setVisible(true);
 
     }    

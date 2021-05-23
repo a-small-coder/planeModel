@@ -30,12 +30,22 @@ public class Sky extends JPanel implements ActionListener{
     Image skyDayImg = new ImageIcon(dirName + "skyBig.jpg").getImage();
     Image skySunSetImg = new ImageIcon(dirName + "skySunset.jpg").getImage();
     Image skyNightImg = new ImageIcon(dirName + "skyNight.jpg").getImage();
+    Image map1 = new ImageIcon(dirName + "map1.png").getImage();
+    Image map2 = new ImageIcon(dirName + "map2.png").getImage();
+    Image map3 = new ImageIcon(dirName + "map3.png").getImage();
+    Image map4 = new ImageIcon(dirName + "map4.png").getImage();
+    Image map5 = new ImageIcon(dirName + "map5.png").getImage();
+    Image map6 = new ImageIcon(dirName + "map6.png").getImage();
+    Image map7 = new ImageIcon(dirName + "map7.png").getImage();
+    Image map8 = new ImageIcon(dirName + "map8.png").getImage();
+    Image[] eventMap = {map1, map2, map3, map4, map5, map6, map7, map8};
 
     Image skyImg = skySunRizeImg;
     Image[] skyes = {skySunRizeImg, skyMorningImg, skyDayImg, skySunSetImg, skyNightImg};
     Timer mainTimer = new Timer(20, this);
 
     private int startY = 0;
+    private int i = 0;
 
     Plane plane;
 
@@ -44,6 +54,7 @@ public class Sky extends JPanel implements ActionListener{
             case 0: this.plane = new TransportPlane(timeF); break;
             case 1: this.plane = new BomberPlane(timeF); break;
             case 2: this.plane = new FierFighter(timeF); break;
+            case 3: this.plane = new ScouterPlane(timeF); break;
             default: break;
         }
         
@@ -52,7 +63,7 @@ public class Sky extends JPanel implements ActionListener{
     public Sky(JFrame frame){
         this.frame = frame;
         createGUI(frame);
-        int t = random.nextInt(3); 
+        int t = random.nextInt(4); 
         planeTypes.setSelectedIndex(t);
 		mainTimer.start();
     }
@@ -72,7 +83,16 @@ public class Sky extends JPanel implements ActionListener{
             g.drawImage(planeImg, plane.get_X(), plane.get_Y(), null);
         }
         if (plane.isEvent() && plane.get_X() <= plane.get_eventPositionX()){
-            g.drawImage(eventImg, plane.get_eventX(), plane.get_eventY(), null);
+            if (plane instanceof ScouterPlane){
+                if (plane.MayChangeMap()){
+                    i = plane.get_mapNumber();
+                }
+                
+                g.drawImage(eventMap[i], plane.get_eventX(), plane.get_eventY(), null);
+            }
+            else{
+                g.drawImage(eventImg, plane.get_eventX(), plane.get_eventY(), null);
+            }
         }
         if (plane.isAddingFuel()){
             g.drawImage(fuelAdderImg, plane.get_fuelX(), plane.get_fuelY(), null);
@@ -188,6 +208,7 @@ public class Sky extends JPanel implements ActionListener{
         planeTypes.addItem("десантный");
         planeTypes.addItem("бомбардировщик");
         planeTypes.addItem("пожарный");
+        planeTypes.addItem("разведчик");
         ButtonHandler planeChooser = new ButtonHandler();
         planeTypes.addActionListener(planeChooser);
         createPlane.add(planeTypes);
@@ -261,7 +282,7 @@ public class Sky extends JPanel implements ActionListener{
                 if (plane.get_timeFueling() == 0){
                     JOptionPane.showMessageDialog(null, "Можно вызвать не более одного дозаправщика");
                 }
-                else if (plane instanceof FierFighter){
+                else if (plane instanceof FierFighter || plane instanceof ScouterPlane){
                     JOptionPane.showMessageDialog(null, "Дозаправка для даного \nтипа самолета невозможна");
                 }
                 else if (plane.get_travelDistance() - plane.get_s() < 1000){
@@ -272,7 +293,7 @@ public class Sky extends JPanel implements ActionListener{
                 }
             }
             else if(command.equals("новый самолет")){
-                int t = random.nextInt(3); 
+                int t = random.nextInt(4); 
                 planeTypes.setSelectedIndex(t);
             }
             else if(command.equals("запустить событие")){

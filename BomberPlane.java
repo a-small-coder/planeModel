@@ -108,4 +108,13 @@ public class BomberPlane extends Plane{
         set_toAirport(true);
     }
 
+    @Override
+    public boolean MayChangeMap(){
+        return false;
+    }
+    @Override
+    public int get_mapNumber(){
+        return 0;
+    }
+
 }

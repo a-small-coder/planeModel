@@ -10,8 +10,8 @@ public abstract class  Plane {
     final int LAYER4_CONST = -20000;
     final int LAYER5_CONST = -28800;
     final Random random = new Random();
-    final int STANDART_Y = 100;
-    final int STANDART_X = 1000;
+    int STANDART_Y = 100;
+    int STANDART_X = 1000;
     final int maximumTravelDistance = 13000;
     final int vxNORMAL = 5;
     final int vyNORMAL = 10;
@@ -20,6 +20,7 @@ public abstract class  Plane {
     private int timeFactor;
     
     private int eventPositionX = 600;
+    private int eventPositionY;
     int skySunRiseCordinateStart;
     int skyMorinigCordinateStart;
     int skyDayCordinateStart;
@@ -161,6 +162,18 @@ public abstract class  Plane {
         }
     }
 
+    public void set_STANDART_X(int num){
+        STANDART_X = num;
+    }
+    public void set_STANDART_Y(int num){
+        STANDART_Y = num;
+    }
+    public int get_STANDART_X(){
+        return STANDART_X;
+    }
+    public int get_STANDART_Y(){
+        return STANDART_Y;
+    }
     public void set_Images(Image[] images){
         tpimg = images[0];
         eventImage = images[1];
@@ -257,6 +270,15 @@ public abstract class  Plane {
     public int get_eventPositionX(){
         return eventPositionX;
     }
+    public void set_eventPositionX(int num){
+        eventPositionX = num;
+    }
+    public int get_eventPositionY(){
+        return eventPositionY;
+    }
+    public void set_eventPositionY(int num){
+        eventPositionY = num;
+    }
     public boolean isEvent(){
         return event;
     }
@@ -309,5 +331,7 @@ public abstract class  Plane {
     public abstract void downToAirport();
     public abstract void addFuel();
     public abstract void planeEvent();
+    public abstract boolean MayChangeMap();
+    public abstract int get_mapNumber();
     
 }

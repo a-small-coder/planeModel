@@ -27,10 +27,10 @@ public class MainApp {
         f.setTitle("моделирование полета самолета");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setResizable(true);
-        f.setBounds(100, 100, 1600, 900);
+        f.setBounds(100, 100, 1500, 800);
         f.setLocationRelativeTo(null);
         f.add(new Sky(f), BorderLayout.CENTER);
-        f.setIconImage(new ImageIcon("planesModel\\img\\planeIcon.png").getImage());
+        f.setIconImage(new ImageIcon("planeModel\\img\\planeIcon.png").getImage());
         f.setVisible(true);
 
     }    

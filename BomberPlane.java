@@ -7,9 +7,9 @@ public class BomberPlane extends Plane{
     private boolean eventAndFuel;
     public BomberPlane(int timeFactor){
         super(timeFactor);
-        Image tpimg = new ImageIcon("planesModel\\img\\bomber.png").getImage();
-        Image eventImage = new ImageIcon("planesModel\\img\\bombs.png").getImage();
-        Image fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
+        Image tpimg = new ImageIcon("planeModel\\img\\bomber.png").getImage();
+        Image eventImage = new ImageIcon("planeModel\\img\\bombs.png").getImage();
+        Image fuelAdderImg = new ImageIcon("planeModel\\img\\fuelAdder.png").getImage();
         Image[] images = {tpimg, eventImage, fuelAdderImg};
         set_Images(images);
         int distanceEvent = random.nextInt(3000) + 2000;
@@ -26,11 +26,11 @@ public class BomberPlane extends Plane{
     public void addFuel(){
         // смещение самолета на 200 пикселей вниз
         if (get_Y() < STANDART_Y + 200 && get_timeFueling() > 0){
-            set_y(get_Y() + get_vY());
+            set_y(get_Y() + get_vY()*2);
         }
         // вылет дозаправщика
         if (get_fuelX() > STANDART_X - 550){
-            set_fuelX(get_fuelX() - get_vX());
+            set_fuelX(get_fuelX() - get_vX()*2);
         }
         else{
             // заправка
@@ -59,8 +59,8 @@ public class BomberPlane extends Plane{
     public void planeEvent(){
         
         // путь к точке события
-        if(get_X() >= get_eventPositionX() && get_eventY() < 1000){
-            set_x(get_X() - get_vX());
+        if(get_X() >= get_eventPositionX() && get_eventY() < 700){
+            set_x(get_X() - get_vX()*2);
         }
         else{
             // если событие началось в момент дозаправки, то меняем стартовое значение изображения собития
@@ -74,10 +74,10 @@ public class BomberPlane extends Plane{
             set_eventY(get_eventY() + get_eventVY());
         }
         // если изображение события ушло за пределы экрана (событие завершилось)
-        if (get_eventY() > 1000){
+        if (get_eventY() > 700){
             // возврат самолета к исходной позиции
             if(get_X() < STANDART_X){
-                set_x(get_X() +get_vX());
+                set_x(get_X() +get_vX()*2);
             }
             else{
                 // когда самолет вернулся, установка флагов завершения собыия

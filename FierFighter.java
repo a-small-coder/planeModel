@@ -7,9 +7,9 @@ public class FierFighter extends Plane{
     private boolean eventAndFuel;
     public FierFighter(int timeFactor){
         super(timeFactor);
-        Image tpimg = new ImageIcon("planesModel\\img\\fierFighter.png").getImage();
-        Image eventImage = new ImageIcon("planesModel\\img\\whater.png").getImage();
-        Image fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
+        Image tpimg = new ImageIcon("planeModel\\img\\fierFighter.png").getImage();
+        Image eventImage = new ImageIcon("planeModel\\img\\whater.png").getImage();
+        Image fuelAdderImg = new ImageIcon("planeModel\\img\\fuelAdder.png").getImage();
         Image[] images = {tpimg, eventImage, fuelAdderImg};
         set_Images(images);
         int distanceEvent = random.nextInt(1000) + 1000;
@@ -29,8 +29,8 @@ public class FierFighter extends Plane{
     public void planeEvent(){
         
         // путь к точке события
-        if(get_X() >= get_eventPositionX() && get_eventY() < 1000){
-            set_x(get_X() - get_vX());
+        if(get_X() >= get_eventPositionX() && get_eventY() < 800){
+            set_x(get_X() - get_vX()*2);
         }
         else{
             // если событие началось в момент дозаправки, то меняем стартовое значение изображения собития
@@ -44,10 +44,10 @@ public class FierFighter extends Plane{
             set_eventY(get_eventY() + get_eventVY());
         }
         // если изображение события ушло за пределы экрана (событие завершилось)
-        if (get_eventY() > 1000){
+        if (get_eventY() > 800){
             // возврат самолета к исходной позиции
             if(get_X() < STANDART_X){
-                set_x(get_X() +get_vX());
+                set_x(get_X() +get_vX()*2);
             }
             else{
                 // когда самолет вернулся, установка флагов завершения собыия

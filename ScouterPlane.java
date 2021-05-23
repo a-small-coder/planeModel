@@ -11,9 +11,9 @@ public class ScouterPlane extends Plane{
     private boolean changeMap;
     public ScouterPlane(int timeFactor){
         super(timeFactor);
-        Image tpimg = new ImageIcon("planesModel\\img\\Scouter.png").getImage();
-        Image eventImage = new ImageIcon("planesModel\\img\\desant.png").getImage();
-        Image fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
+        Image tpimg = new ImageIcon("planeModel\\img\\Scouter.png").getImage();
+        Image eventImage = new ImageIcon("planeModel\\img\\desant.png").getImage();
+        Image fuelAdderImg = new ImageIcon("planeModel\\img\\fuelAdder.png").getImage();
         Image[] images = {tpimg, eventImage, fuelAdderImg};
         set_Images(images);
         int distanceEvent = random.nextInt(1000) + 1000;
@@ -21,14 +21,13 @@ public class ScouterPlane extends Plane{
         set_timeFueling(30);
         add_fuel(random.nextInt(300) + 5000);
         set_travelDistance(distanceEvent + 1000);
-        // eventAndFuel = false;
         mapShowed = 3;
         set_eventPositionX(600);
-        set_eventPositionY(500);
+        set_eventPositionY(400);
         mapShowing = true;
-        set_eventX(1475);
-        set_eventY(600);
-        set_STANDART_Y(400);
+        set_eventX(1375);
+        set_eventY(500);
+        set_STANDART_Y(300);
         
 }
 
@@ -58,7 +57,7 @@ public class ScouterPlane extends Plane{
         // путь к точке события
         if((get_X() >= get_eventPositionX() || get_Y() <= get_eventPositionY()) && get_eventY() < 1000 && mapShowed > 0){
             if (get_X() >= get_eventPositionX()){
-                set_x(get_X() - get_vX());
+                set_x(get_X() - get_vX()*2);
             }
             if (get_Y() <= get_eventPositionY()){
                 set_y(get_Y() + get_vY());
@@ -89,7 +88,7 @@ public class ScouterPlane extends Plane{
                 if (isAddingFuel()){
                     if(get_X() < STANDART_X || get_Y() > STANDART_Y + 200){
                         if (get_X() < STANDART_X){
-                            set_x(get_X() + get_vX());
+                            set_x(get_X() + get_vX()*2);
                         }
                         if (get_Y() > STANDART_Y + 200){
                             set_y(get_Y() - get_vY());
@@ -105,10 +104,10 @@ public class ScouterPlane extends Plane{
                 else {
                     if(get_X() < STANDART_X || get_Y() > STANDART_Y){
                         if (get_X() < STANDART_X){
-                            set_x(get_X() + get_vX());
+                            set_x(get_X() + get_vX()*2);
                         }
                         if (get_Y() > STANDART_Y){
-                            set_y(get_Y() - get_vY());
+                            set_y(get_Y() - get_vY()*2);
                         }
                     }
                     else{

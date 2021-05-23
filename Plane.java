@@ -72,7 +72,7 @@ public abstract class  Plane {
         this.timeFactor = timeF;
         set_s(0);
         set_x(1400);
-        set_y(900);
+        set_y(800);
         set_vX(vxNORMAL);
         set_vY(vyNORMAL);
         set_eventX(900);

@@ -24,7 +24,7 @@ public class Sky extends JPanel implements ActionListener{
 
     final Random random = new Random();
     final int timeFCommon = 1;
-    public final String dirName = "planesModel\\img\\";
+    public final String dirName = "planeModel\\img\\";
     Image skySunRizeImg = new ImageIcon(dirName + "skySunRise.jpg").getImage();
     Image skyMorningImg = new ImageIcon(dirName + "skyMorning.jpg").getImage();
     Image skyDayImg = new ImageIcon(dirName + "skyBig.jpg").getImage();

@@ -1,8 +1,5 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.BorderLayout;
-import java.awt.event.*;
-import java.util.Random;
 
 public class MainApp {
 
@@ -12,8 +9,7 @@ public class MainApp {
         f.setTitle("моделирование полета самолета");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setResizable(true);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setBounds(100, 100, 1500, 1000);
+        f.setBounds(100, 100, 1500, 900);
         f.setLocationRelativeTo(null);
         return f;
     }
@@ -26,8 +22,7 @@ public class MainApp {
         f.setTitle("моделирование полета самолета");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setResizable(true);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setBounds(100, 100, (int) dim.getWidth(), (int) dim.getHeight());
+        f.setBounds(100, 100, 1600, 1000);
         f.setLocationRelativeTo(null);
         f.add(new Sky(f), BorderLayout.CENTER);
         f.setVisible(true);

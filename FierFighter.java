@@ -2,51 +2,26 @@ import java.awt.*;
 import java.util.Random;
 import javax.swing.*;
 
-public class TransportPlane extends Plane{
+public class FierFighter extends Plane{
     private final Random random = new Random();
     private boolean eventAndFuel;
-    public TransportPlane(){
+    public FierFighter(){
         super();
-        Image tpimg = new ImageIcon("planesModel\\img\\transportPlane.png").getImage();
-        Image eventImage = new ImageIcon("planesModel\\img\\desant.png").getImage();
+        Image tpimg = new ImageIcon("planesModel\\img\\fierFighter.png").getImage();
+        Image eventImage = new ImageIcon("planesModel\\img\\whater.png").getImage();
         Image fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
         Image[] images = {tpimg, eventImage, fuelAdderImg};
         set_Images(images);
-        int distanceEvent = random.nextInt(3000) + 1000;
+        int distanceEvent = random.nextInt(1000) + 1000;
         set_distanceToEvent(distanceEvent);
-        set_timeFueling(30);
-        add_fuel(random.nextInt(5000) + 4000);
-        set_fuelX(STANDART_X + 400);
-        set_fuelY(STANDART_Y);
-        set_travelDistance(distanceEvent * 2 + 1000);
+        add_fuel(random.nextInt(2000) + 5000);
+        set_travelDistance(distanceEvent * 2);
         eventAndFuel = false;
 }
     
     @Override
     public void addFuel(){
-        if (get_Y() < STANDART_Y + 200 && get_timeFueling() > 0){
-            set_y(get_Y() + get_vY());
-        }
-        if (get_fuelX() > STANDART_X - 550){
-            set_fuelX(get_fuelX() - get_vX());
-        }
-        else{
-            if(get_timeFueling() > 0){
-                add_fuel(150);
-                add_timeFueling(-1);
-            }
-            else{
-                if (get_fuelY() > STANDART_Y - 400){
-                    set_fuelY(get_fuelY() - get_vY());
-                }
-                else if (get_Y() > STANDART_Y){
-                    set_y(get_Y() - get_vY());
-                }
-                else{
-                    set_addingFuelFlag(false);
-                }
-            }
-        }
+        set_addingFuelFlag(true);
     }
 
     @Override

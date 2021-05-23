@@ -38,8 +38,8 @@ public class Sky extends JPanel implements ActionListener{
     public void createPlane(int type){
         switch (type){
             case 0: this.plane = new TransportPlane(); break;
-            // case 1: this.plane = new Plane(1); break;
-            // case 2: this.plane = new Plane(2); break;
+            case 1: this.plane = new BomberPlane(); break;
+            case 2: this.plane = new FierFighter(); break;
             default: break;
         }
         
@@ -49,7 +49,7 @@ public class Sky extends JPanel implements ActionListener{
         this.frame = frame;
         createGUI(frame);
         int t = random.nextInt(3); 
-        planeTypes.setSelectedIndex(0);
+        planeTypes.setSelectedIndex(t);
 		mainTimer.start();
     }
     @Override
@@ -233,6 +233,9 @@ public class Sky extends JPanel implements ActionListener{
                 if (plane.get_timeFueling() == 0){
                     JOptionPane.showMessageDialog(null, "Можно вызвать не более одного дозаправщика");
                 }
+                else if (plane instanceof FierFighter){
+                    JOptionPane.showMessageDialog(null, "Дозаправка для даного \nтипа самолета невозможна");
+                }
                 else if (plane.get_travelDistance() - plane.get_s() < 1000){
                     JOptionPane.showMessageDialog(null, "Начинается посадка. Дозаправка невозможна");
                 }
@@ -242,7 +245,7 @@ public class Sky extends JPanel implements ActionListener{
             }
             else if(command.equals("новый самолет")){
                 int t = random.nextInt(3); 
-                planeTypes.setSelectedIndex(0);
+                planeTypes.setSelectedIndex(t);
             }
             else if(command.equals("запустить событие")){
                 plane.set_EventFlag(true);

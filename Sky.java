@@ -37,9 +37,9 @@ public class Sky extends JPanel implements ActionListener{
 
     public void createPlane(int type){
         switch (type){
-            case 0: this.plane = new Plane(0); break;
-            case 1: this.plane = new Plane(1); break;
-            case 2: this.plane = new Plane(2); break;
+            case 0: this.plane = new TransportPlane(); break;
+            // case 1: this.plane = new Plane(1); break;
+            // case 2: this.plane = new Plane(2); break;
             default: break;
         }
         
@@ -49,7 +49,7 @@ public class Sky extends JPanel implements ActionListener{
         this.frame = frame;
         createGUI(frame);
         int t = random.nextInt(3); 
-        planeTypes.setSelectedIndex(t);
+        planeTypes.setSelectedIndex(0);
 		mainTimer.start();
     }
     @Override
@@ -242,7 +242,7 @@ public class Sky extends JPanel implements ActionListener{
             }
             else if(command.equals("новый самолет")){
                 int t = random.nextInt(3); 
-                planeTypes.setSelectedIndex(t);
+                planeTypes.setSelectedIndex(0);
             }
             else if(command.equals("запустить событие")){
                 plane.set_EventFlag(true);

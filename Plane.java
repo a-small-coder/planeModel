@@ -13,6 +13,11 @@ public abstract class  Plane {
     final int STANDART_Y = 100;
     final int STANDART_X = 1000;
     final int maximumTravelDistance = 13000;
+    final int vxNORMAL = 5;
+    final int vyNORMAL = 10;
+    final int eventvxNORMAL = 10;
+    final int eventvyNORMAL = 5;
+    private int timeFactor;
     
     private int eventPositionX = 600;
     int skySunRiseCordinateStart;
@@ -48,7 +53,7 @@ public abstract class  Plane {
     private boolean toAirport;
    
 
-    public Plane(){
+    public Plane(int timeF){
         skySunRiseCordinateStart = LAYER1_CONST;
         skyMorinigCordinateStart = LAYER2_CONST;
         skyDayCordinateStart = LAYER3_CONST;
@@ -63,17 +68,27 @@ public abstract class  Plane {
         message2FuelNotShowed = true;
         addingFuel = false;
         fuel = 0;
+        this.timeFactor = timeF;
         set_s(0);
         set_x(1400);
         set_y(900);
-        set_vX(10);
-        set_vY(20);
+        set_vX(vxNORMAL);
+        set_vY(vyNORMAL);
         set_eventX(900);
         set_eventY(100);
-        set_eventVX(20);
-        set_eventVY(10);
+        set_eventVX(eventvxNORMAL);
+        set_eventVY(eventvyNORMAL);
+        changeTimeSpeed();
     }
-    
+    public void set_timeFactor(int num){
+        timeFactor = num;
+    }
+    public void changeTimeSpeed(){
+        set_vX(vxNORMAL * timeFactor);
+        set_vY(vyNORMAL * timeFactor);
+        set_eventVX(eventvxNORMAL * timeFactor);
+        set_eventVY(eventvyNORMAL * timeFactor);
+    }
     public void planeRize(){
         if (y > STANDART_Y) {
             y -= vY;
@@ -105,7 +120,7 @@ public abstract class  Plane {
         }
 
         if (fuel <= 0 && !planeDown){
-            JOptionPane.showMessageDialog(null, "Топливо закончилось. Самолет упал");
+            JOptionPane.showMessageDialog(null, "Топливо закончилось. Самолет разбился");
             planeDown = true;
         }
         if(planeDown){
@@ -127,7 +142,9 @@ public abstract class  Plane {
         moveLayers(get_vX());
     }
 
+    // иммитация движения самолета (на самом деле двигаются фоновые изображения на vX пикселей каждый тик наймера)
     public void moveLayers(int vx){
+        vx = vx * 2;
         if (skyNightCordinateStart + vx >= 0){
             skySunRiseCordinateStart = LAYER1_CONST;
             skyMorinigCordinateStart = LAYER2_CONST;

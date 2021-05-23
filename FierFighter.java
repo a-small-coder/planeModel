@@ -5,8 +5,8 @@ import javax.swing.*;
 public class FierFighter extends Plane{
     private final Random random = new Random();
     private boolean eventAndFuel;
-    public FierFighter(){
-        super();
+    public FierFighter(int timeFactor){
+        super(timeFactor);
         Image tpimg = new ImageIcon("planesModel\\img\\fierFighter.png").getImage();
         Image eventImage = new ImageIcon("planesModel\\img\\whater.png").getImage();
         Image fuelAdderImg = new ImageIcon("planesModel\\img\\fuelAdder.png").getImage();
@@ -21,44 +21,57 @@ public class FierFighter extends Plane{
     
     @Override
     public void addFuel(){
+        // установка флага окончания дозаправки (этот тип самолета нельзя заправить)
         set_addingFuelFlag(true);
     }
 
     @Override
     public void planeEvent(){
         
+        // путь к точке события
         if(get_X() >= get_eventPositionX() && get_eventY() < 1000){
             set_x(get_X() - get_vX());
         }
         else{
+            // если событие началось в момент дозаправки, то меняем стартовое значение изображения собития
             if (isAddingFuel() && isEvent() && !eventAndFuel){
                 set_eventX(get_X() + 215);
                 set_eventY(get_Y());
                 eventAndFuel = true;
             }
+            // движение изображения события
             set_eventX(get_eventX() + get_eventVX());
             set_eventY(get_eventY() + get_eventVY());
         }
-        
+        // если изображение события ушло за пределы экрана (событие завершилось)
         if (get_eventY() > 1000){
-            
+            // возврат самолета к исходной позиции
             if(get_X() < STANDART_X){
                 set_x(get_X() +get_vX());
             }
             else{
+                // когда самолет вернулся, установка флагов завершения собыия
                 set_EventFlag(false);
                 set_distanceToEvent(0);
                 set_EventDoneFlag(true);
             }
         }
+        // учет топлива и пройденного расстояния при выполнении события
         add_fuel(-1 * get_vX());
         set_s(get_s() + get_vX());
         if (get_Fuel() < 0){
-            add_fuel(-1 * get_Fuel());
+            // сброс показателей топлива до 0, если оно < 0
+            add_fuel(0 - get_Fuel());
+            set_EventFlag(false);
+            set_distanceToEvent(0);
+            set_EventDoneFlag(true);
+            set_planeDownFlag(true);
         }
+        // имитация движения самолета 
         moveLayers(get_vX());
     }
 
+    // посадка самолета
     @Override
     public void downToAirport(){
         set_planeDownFlag(true);

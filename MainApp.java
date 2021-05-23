@@ -8,7 +8,7 @@ public class MainApp {
         JFrame f = new JFrame();
         f.setTitle("моделирование полета самолета");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        f.setResizable(true);
+        f.setResizable(false);
         f.setBounds(100, 100, 1500, 900);
         f.setLocationRelativeTo(null);
         return f;
@@ -22,7 +22,7 @@ public class MainApp {
         f.setTitle("моделирование полета самолета");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setResizable(true);
-        f.setBounds(100, 100, 1600, 1000);
+        f.setBounds(100, 100, 1600, 900);
         f.setLocationRelativeTo(null);
         f.add(new Sky(f), BorderLayout.CENTER);
         f.setVisible(true);

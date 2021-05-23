@@ -1,5 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.*;
+
 import java.awt.event.*;
 import java.util.Random;
 
@@ -8,7 +10,7 @@ public class Sky extends JPanel implements ActionListener{
     JFrame frame;
     JPanel GroupPanel;
     JLabel planesLabel;
-    JComboBox planeTypes;
+    JComboBox<String> planeTypes;
     JLabel spaceToEventStartInfoLabel;
     JButton startEventButton;
     JLabel fuelInfoLabel;
@@ -18,8 +20,10 @@ public class Sky extends JPanel implements ActionListener{
     JLabel distanceLostValueLabel;
     JButton addFuelbutton;
     JButton restart;
+    JSlider timeSlider;
 
     final Random random = new Random();
+    final int timeFCommon = 1;
     public final String dirName = "planesModel\\img\\";
     Image skySunRizeImg = new ImageIcon(dirName + "skySunRise.jpg").getImage();
     Image skyMorningImg = new ImageIcon(dirName + "skyMorning.jpg").getImage();
@@ -35,11 +39,11 @@ public class Sky extends JPanel implements ActionListener{
 
     Plane plane;
 
-    public void createPlane(int type){
+    public void createPlane(int type, int timeF){
         switch (type){
-            case 0: this.plane = new TransportPlane(); break;
-            case 1: this.plane = new BomberPlane(); break;
-            case 2: this.plane = new FierFighter(); break;
+            case 0: this.plane = new TransportPlane(timeF); break;
+            case 1: this.plane = new BomberPlane(timeF); break;
+            case 2: this.plane = new FierFighter(timeF); break;
             default: break;
         }
         
@@ -127,17 +131,16 @@ public class Sky extends JPanel implements ActionListener{
                     plane.downToAirport();
                 }
             }
-            distanceLostInfoLabel.setText("Пролететь осталось: ");
-            distanceLostValueLabel.setText(" " + Integer.toString(b) + "км ");
+            distanceLostInfoLabel.setText("Пролететь осталось: " + Integer.toString(b) + "км");
         }
         else{
             if (plane.get_travelDistance() - plane.get_s() <= 0){
                 distanceLostInfoLabel.setText("Самолет сел");
             }
             else{
-                distanceLostInfoLabel.setText("Самолет упал");
+                distanceLostInfoLabel.setText("Самолет разбился");
             }
-            distanceLostValueLabel.setText("");
+            distanceLostInfoLabel.setText("Пролететь осталось: 0 км");
         }
 
         // отключение кнопок
@@ -161,14 +164,13 @@ public class Sky extends JPanel implements ActionListener{
             if (a < 0){
                 a = 0;
             }
-            spaceToEventStartInfoLabel.setText("до точки события осталось: ");
-            spaceToEventStartValueLabel.setText(" " + Integer.toString(a) + "км ");
+            spaceToEventStartInfoLabel.setText("До точки события осталось: " + Integer.toString(a) + "км");
         }
         else{
-            spaceToEventStartInfoLabel.setText("событие произошло");
-            spaceToEventStartValueLabel.setText("");
+            spaceToEventStartInfoLabel.setText("Событие произошло");
+            spaceToEventStartInfoLabel.setText("До точки события осталось: 0км");
         }
-        fuelValueLabel.setText(" " + Integer.toString(plane.get_Fuel()) + "км ");
+        fuelInfoLabel.setText("Топливо осталось: " + Integer.toString(plane.get_Fuel()) + "км");
 
         repaint();
         //getInfomationOfPlane(tPlane);
@@ -176,52 +178,78 @@ public class Sky extends JPanel implements ActionListener{
 
     public void createGUI(JFrame f){
         GroupPanel = new JPanel();
-        GroupPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        GroupPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 30, 30));
 
-        planesLabel = new JLabel("выбор самолета: ");
-        GroupPanel.add(planesLabel);
-        planeTypes = new JComboBox();
+        JPanel createPlane = new JPanel(new GridLayout(3, 1, 15, 5));
+        planesLabel = new JLabel("Выбор самолета: ");
+        createPlane.add(planesLabel);
+        planeTypes = new JComboBox<String>();
         planeTypes.setPreferredSize(new Dimension(150, 30)); 
         planeTypes.addItem("десантный");
         planeTypes.addItem("бомбардировщик");
         planeTypes.addItem("пожарный");
         ButtonHandler planeChooser = new ButtonHandler();
         planeTypes.addActionListener(planeChooser);
-        GroupPanel.add(planeTypes);
-
-        spaceToEventStartInfoLabel = new JLabel("до точки события осталось: ");
-        GroupPanel.add(spaceToEventStartInfoLabel);
-        spaceToEventStartValueLabel = new JLabel("км");
-        GroupPanel.add(spaceToEventStartValueLabel);
-        startEventButton = new JButton("запустить событие");
-        startEventButton.setPreferredSize(new Dimension(215, 30)); 
-        ButtonHandler startEventHandler = new ButtonHandler();
-        startEventButton.addActionListener(startEventHandler);
-        GroupPanel.add(startEventButton);
-
-        JPanel fuelAndDistanceP = new JPanel(new GridLayout(2, 2, 15, 15));
-        fuelInfoLabel = new JLabel("Топливо осталось: ");
-        fuelAndDistanceP.add(fuelInfoLabel);
-        fuelValueLabel = new JLabel("км");
-        fuelAndDistanceP.add(fuelValueLabel);
-        distanceLostInfoLabel = new JLabel("Пролететь осталось: ");
-        fuelAndDistanceP.add(distanceLostInfoLabel);
-        distanceLostValueLabel = new JLabel("км");
-        fuelAndDistanceP.add(distanceLostValueLabel);
-        GroupPanel.add(fuelAndDistanceP);
-
-        addFuelbutton = new JButton("вызвать заправщик");
-        ButtonHandler addFuelHundler = new ButtonHandler();
-        addFuelbutton.addActionListener(addFuelHundler);
-        addFuelbutton.setPreferredSize(new Dimension(215, 30));   
-        GroupPanel.add(addFuelbutton);
-        
-
+        createPlane.add(planeTypes);
         restart = new JButton("новый самолет");
         restart.setPreferredSize(new Dimension(215, 30)); 
         ButtonHandler restartHundler = new ButtonHandler();
         restart.addActionListener(restartHundler);
-        GroupPanel.add(restart);
+        createPlane.add(restart);
+        GroupPanel.add(createPlane);
+
+        JLabel spaceBlock1 = new JLabel("");
+        spaceBlock1.setPreferredSize(new Dimension(100, 30));
+        GroupPanel.add(spaceBlock1);
+
+        JPanel eventPanel = new JPanel(new GridLayout(3, 1, 0, 5));
+        JLabel eventPanelInfo = new JLabel(" Событие ");
+        eventPanel.add(eventPanelInfo);
+        spaceToEventStartInfoLabel = new JLabel("До точки события осталось: ");
+        eventPanel.add(spaceToEventStartInfoLabel);
+        startEventButton = new JButton("запустить событие");
+        startEventButton.setPreferredSize(new Dimension(215, 30)); 
+        ButtonHandler startEventHandler = new ButtonHandler();
+        startEventButton.addActionListener(startEventHandler);
+        eventPanel.add(startEventButton);
+        GroupPanel.add(eventPanel);
+
+        JLabel spaceBlock2 = new JLabel("");
+        spaceBlock2.setPreferredSize(new Dimension(100, 30));
+        GroupPanel.add(spaceBlock2);
+
+        JPanel fuelAndDistanceP = new JPanel(new GridLayout(3, 1, 0, 5));
+        fuelInfoLabel = new JLabel("Топливо осталось: ");
+        fuelAndDistanceP.add(fuelInfoLabel);
+        distanceLostInfoLabel = new JLabel("Пролететь осталось: ");
+        fuelAndDistanceP.add(distanceLostInfoLabel);
+
+        addFuelbutton = new JButton("вызвать заправщик");
+        ButtonHandler addFuelHundler = new ButtonHandler();
+        addFuelbutton.addActionListener(addFuelHundler);
+        addFuelbutton.setPreferredSize(new Dimension(215, 30)); 
+        fuelAndDistanceP.add(addFuelbutton);
+        GroupPanel.add(fuelAndDistanceP);
+        
+        JLabel spaceBlock3 = new JLabel("");
+        spaceBlock3.setPreferredSize(new Dimension(100, 30));
+        GroupPanel.add(spaceBlock3);
+
+        JPanel timePanel = new JPanel(new GridLayout(2, 1, 0, 10));
+        JLabel timeInfoLabel = new JLabel("Управление временем: ");
+        timePanel.add(timeInfoLabel);
+        timeSlider = new JSlider(0, 10, 1);
+        timeSlider.setMajorTickSpacing(5);
+        timeSlider.setPaintLabels(true);
+        timeSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                int tF = ((JSlider)e.getSource()).getValue();
+                plane.set_timeFactor(tF);
+                plane.changeTimeSpeed();
+            }
+         });
+         timePanel.add(timeSlider);
+         GroupPanel.add(timePanel);
 
         f.add(GroupPanel, BorderLayout.NORTH);
     }
@@ -252,9 +280,10 @@ public class Sky extends JPanel implements ActionListener{
                 plane.set_distanceToEvent(plane.get_s());
             }
             else if (e.getSource() instanceof JComboBox) {
-                JComboBox mySource = (JComboBox) e.getSource();
+                JComboBox<String> mySource = (JComboBox) e.getSource();
                 int index = mySource.getSelectedIndex();
-                createPlane(index);
+                if (timeSlider.getValue() != timeFCommon);
+                createPlane(index, timeSlider.getValue());
             }
 		}	
 	} 

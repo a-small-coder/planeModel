@@ -30,14 +30,14 @@ public class Sky extends JPanel implements ActionListener{
     Image skyDayImg = new ImageIcon(dirName + "skyBig.jpg").getImage();
     Image skySunSetImg = new ImageIcon(dirName + "skySunset.jpg").getImage();
     Image skyNightImg = new ImageIcon(dirName + "skyNight.jpg").getImage();
-    Image map1 = new ImageIcon(dirName + "map1.png").getImage();
-    Image map2 = new ImageIcon(dirName + "map2.png").getImage();
-    Image map3 = new ImageIcon(dirName + "map3.png").getImage();
-    Image map4 = new ImageIcon(dirName + "map4.png").getImage();
-    Image map5 = new ImageIcon(dirName + "map5.png").getImage();
-    Image map6 = new ImageIcon(dirName + "map6.png").getImage();
-    Image map7 = new ImageIcon(dirName + "map7.png").getImage();
-    Image map8 = new ImageIcon(dirName + "map8.png").getImage();
+    Image map1 = new ImageIcon(dirName + "map21.png").getImage();
+    Image map2 = new ImageIcon(dirName + "map22.png").getImage();
+    Image map3 = new ImageIcon(dirName + "map23.png").getImage();
+    Image map4 = new ImageIcon(dirName + "map24.png").getImage();
+    Image map5 = new ImageIcon(dirName + "map25.png").getImage();
+    Image map6 = new ImageIcon(dirName + "map26.png").getImage();
+    Image map7 = new ImageIcon(dirName + "map27.png").getImage();
+    Image map8 = new ImageIcon(dirName + "map28.png").getImage();
     Image[] eventMap = {map1, map2, map3, map4, map5, map6, map7, map8};
 
     Image skyImg = skySunRizeImg;
@@ -50,6 +50,9 @@ public class Sky extends JPanel implements ActionListener{
     Plane plane;
 
     public void createPlane(int type, int timeF){
+        if (timeF != 1){
+            timeF = 1;
+        }
         switch (type){
             case 0: this.plane = new TransportPlane(timeF); break;
             case 1: this.plane = new BomberPlane(timeF); break;
@@ -160,7 +163,6 @@ public class Sky extends JPanel implements ActionListener{
             else{
                 distanceLostInfoLabel.setText("Самолет разбился");
             }
-            distanceLostInfoLabel.setText("Пролететь осталось: 0 км");
         }
 
         // отключение кнопок
@@ -188,12 +190,10 @@ public class Sky extends JPanel implements ActionListener{
         }
         else{
             spaceToEventStartInfoLabel.setText("Событие произошло");
-            spaceToEventStartInfoLabel.setText("До точки события осталось: 0км");
         }
-        fuelInfoLabel.setText("Топливо осталось: " + Integer.toString(plane.get_Fuel()) + "км");
+        fuelInfoLabel.setText("Топлива осталось: " + Integer.toString(plane.get_Fuel()) + "км");
 
         repaint();
-        //getInfomationOfPlane(tPlane);
     }
 
     public void createGUI(JFrame f){
@@ -203,7 +203,7 @@ public class Sky extends JPanel implements ActionListener{
         JPanel createPlane = new JPanel(new GridLayout(3, 1, 15, 5));
         planesLabel = new JLabel("Выбор самолета: ");
         createPlane.add(planesLabel);
-        planeTypes = new JComboBox<String>();
+        planeTypes = new JComboBox<>();
         planeTypes.setPreferredSize(new Dimension(150, 30)); 
         planeTypes.addItem("десантный");
         planeTypes.addItem("бомбардировщик");
@@ -265,6 +265,14 @@ public class Sky extends JPanel implements ActionListener{
         timeSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 int tF = ((JSlider)e.getSource()).getValue();
+                if (tF > 5 && tF < 10){
+                    tF = 5;
+                    timeSlider.setValue(5);
+                }
+                if (tF > 1 && tF < 5){
+                    tF = 1;
+                    timeSlider.setValue(5);
+                }
                 plane.set_timeFactor(tF);
                 plane.changeTimeSpeed();
             }
@@ -304,6 +312,7 @@ public class Sky extends JPanel implements ActionListener{
                 JComboBox<String> mySource = (JComboBox) e.getSource();
                 int index = mySource.getSelectedIndex();
                 if (timeSlider.getValue() != timeFCommon);
+                timeSlider.setValue(1);
                 createPlane(index, timeSlider.getValue());
             }
 		}	

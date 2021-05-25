@@ -25,8 +25,8 @@ public class ScouterPlane extends Plane{
         set_eventPositionX(600);
         set_eventPositionY(400);
         mapShowing = true;
-        set_eventX(1375);
-        set_eventY(500);
+        set_eventX(1275);
+        set_eventY(400);
         set_STANDART_Y(300);
         
 }

@@ -22,7 +22,10 @@ public class TransportPlane extends Plane{
         set_fuelY(STANDART_Y);
         set_travelDistance(distanceEvent * 2 + 1000);
         desantCounter = 3;
-        set_eventPositionY(400);
+        set_eventPositionX(300);
+        set_eventPositionY(300);
+        set_eventX(550);
+        set_eventY(350);
         desantCounterChange = false;
 
 }
@@ -64,9 +67,9 @@ public class TransportPlane extends Plane{
     @Override
     public void planeEvent(){
         // путь к точке события
-        if((get_X() >= get_eventPositionX() || get_Y() <= get_eventPositionY()) && get_eventY() < 600 && desantCounter > 0){
-            if (get_X() >= get_eventPositionX()*2){
-                set_x(get_X() - get_vX());
+        if((get_X() >= get_eventPositionX() || get_Y() <= get_eventPositionY()) && get_eventY() < 700 && desantCounter > 0){
+            if (get_X() >= get_eventPositionX()){
+                set_x(get_X() - get_vX()*2);
             }
             if (get_Y() <= get_eventPositionY()){
                 set_y(get_Y() + get_vY());
@@ -76,7 +79,7 @@ public class TransportPlane extends Plane{
         else{
             // если событие началось, то меняем стартовое значение изображения собития
             if (!desantCounterChange){
-                set_eventX(get_X() + 215);
+                set_eventX(get_X() + 235);
                 set_eventY(get_Y());
                 desantCounterChange = true;
                 desantCounter -= 1;
@@ -86,9 +89,9 @@ public class TransportPlane extends Plane{
             set_eventY(get_eventY() + get_eventVY());
         }
         // если изображение дошло до точки повтора события или его завершения
-        if (get_eventY() > 600){
+        if (get_eventY() > 700){
             if (desantCounter > 0){
-                set_eventX(get_X() + 215);
+                set_eventX(get_X() + 235);
                 set_eventY(get_Y());
                 desantCounter -= 1;
             }

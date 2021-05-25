@@ -111,7 +111,7 @@ public abstract class  Plane {
             messageFuelNotShowed = false;
         }
 
-        if (fuel < 1500  && (travelDistance - s) > 1000 && !planeDown && message2FuelNotShowed){
+        if (fuel < 1500  && (travelDistance - s) > 1000 && !planeDown && message2FuelNotShowed && !isAddingFuel()){
             JOptionPane.showMessageDialog(null, "Мало топлива! Вызовите дозаправщик");
             message2FuelNotShowed = false;
         }
